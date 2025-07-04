@@ -4,6 +4,8 @@ import './Signup.css';
 
 const Signup = () => {
     const [formData, setFormData] = useState({
+        first_name: '',
+        last_name: '',
         email: '',
         password: ''
     });
@@ -23,6 +25,14 @@ const Signup = () => {
     };
 
     const validateForm = () => {
+        if (!formData.first_name) {
+            setError('First name is required');
+            return false;
+        }
+        if (!formData.last_name) {
+            setError('Last name is required');
+            return false;
+        }
         if (!formData.email) {
             setError('Email is required');
             return false;
@@ -61,12 +71,14 @@ const Signup = () => {
         try {
             // Replace with your actual API endpoint
             const response = await axios.post(`${baseUrl}/users/signup/`, {
+                first_name: formData.first_name,
+                last_name: formData.last_name,
                 email: formData.email,
                 password: formData.password
             });
 
             setMessage('Account created successfully!');
-            setFormData({ email: '', password: '' }); // Reset form
+            setFormData({ first_name: '', last_name: '', email: '', password: '' }); // Reset form
 
             // You can handle successful signup here (e.g., redirect, store token, etc.)
             console.log('Signup successful:', response.data);
@@ -88,6 +100,34 @@ const Signup = () => {
                 <h2>Sign Up</h2>
 
                 <form onSubmit={handleSubmit}>
+                    <div className="form-group">
+                        <label htmlFor="first_name">First Name:</label>
+                        <input
+                            type="text"
+                            id="first_name"
+                            name="first_name"
+                            value={formData.first_name}
+                            onChange={handleChange}
+                            placeholder="Enter your first name"
+                            required
+                            disabled={loading}
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label htmlFor="last_name">Last Name:</label>
+                        <input
+                            type="text"
+                            id="last_name"
+                            name="last_name"
+                            value={formData.last_name}
+                            onChange={handleChange}
+                            placeholder="Enter your last name"
+                            required
+                            disabled={loading}
+                        />
+                    </div>
+
                     <div className="form-group">
                         <label htmlFor="email">Email:</label>
                         <input
