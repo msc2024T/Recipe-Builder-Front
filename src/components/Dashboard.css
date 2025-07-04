@@ -1,0 +1,342 @@
+.dashboard-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #fff5e6 0%, #ffe4cc 50%, #ffd4b3 100%);
+}
+
+.dashboard-header {
+  background: white;
+  padding: 1rem 2rem;
+  box-shadow: 0 4px 8px rgba(183, 104, 36, 0.2);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 3px solid #ff8c00;
+}
+
+.logo-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.dashboard-logo {
+  height: 40px;
+  width: auto;
+}
+
+.dashboard-header h1 {
+  color: #ff8c00;
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.user-info span {
+  color: #666;
+  font-weight: 500;
+}
+
+.logout-btn {
+  padding: 0.5rem 1rem;
+  background: linear-gradient(135deg, #ff8c00 0%, #b76824 100%);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(183, 104, 36, 0.4);
+}
+
+.logout-btn:hover {
+  background: linear-gradient(135deg, #d67200 0%, #a05a1e 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(183, 104, 36, 0.5);
+}
+
+.dashboard-content {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.welcome-section {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.welcome-section h2 {
+  color: #8b4513;
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  text-shadow: 1px 1px 2px rgba(139, 69, 19, 0.1);
+}
+
+.welcome-section p {
+  color: #a0522d;
+  font-size: 1.1rem;
+  text-shadow: 1px 1px 2px rgba(160, 82, 45, 0.1);
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.dashboard-card {
+  position: relative;
+  background: white;
+  border-radius: 20px 20px 8px 8px;
+  border: 1px solid #e0e0e0;
+  border-bottom: 4px solid #ff8c00;
+  box-shadow: 0 2px 8px rgba(183, 104, 36, 0.1), 0 1px 3px rgba(0, 0, 0, 0.05);
+  text-align: center;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  overflow: hidden;
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #ff8c00 0%, #ffa500 50%, #ff8c00 100%);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 12px 32px rgba(183, 104, 36, 0.25),
+    0 4px 16px rgba(0, 0, 0, 0.1);
+  border-bottom-color: #d67200;
+  border-color: #ff8c00;
+}
+
+.dashboard-card:hover::before {
+  transform: scaleX(1);
+}
+
+.dashboard-card:active {
+  transform: translateY(-4px) scale(1.01);
+  transition-duration: 0.1s;
+}
+
+.card-header {
+  padding: 1.5rem 1.5rem 1rem;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 140, 0, 0.03) 0%,
+    rgba(255, 245, 230, 0.5) 100%
+  );
+  border-bottom: 1px solid rgba(255, 140, 0, 0.1);
+  position: relative;
+}
+
+.card-header::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #ff8c00, transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.dashboard-card:hover .card-header::after {
+  opacity: 1;
+}
+
+.dashboard-card h3 {
+  color: #ff8c00;
+  margin: 0 0 0.5rem 0;
+  font-size: 1.4rem;
+  font-weight: 700;
+  text-shadow: 0 1px 2px rgba(255, 140, 0, 0.1);
+  letter-spacing: -0.02em;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+/* Add icons for each card type */
+.dashboard-card:nth-child(1) h3::before {
+  content: "📚";
+  font-size: 1.2rem;
+}
+
+.dashboard-card:nth-child(2) h3::before {
+  content: "➕";
+  font-size: 1.2rem;
+}
+
+.dashboard-card:nth-child(3) h3::before {
+  content: "❤️";
+  font-size: 1.2rem;
+}
+
+.dashboard-card:nth-child(4) h3::before {
+  content: "🛒";
+  font-size: 1.2rem;
+}
+
+.dashboard-card p {
+  color: #7a7a7a;
+  margin: 0;
+  line-height: 1.4;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.card-content {
+  flex: 1;
+  padding: 1rem 1.5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.card-button {
+  margin-top: auto;
+  padding: 0.875rem 2rem;
+  background: linear-gradient(135deg, #ff8c00 0%, #d67200 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 0.95rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  position: relative;
+  overflow: hidden;
+}
+
+.card-button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.card-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(183, 104, 36, 0.4), 0 4px 12px rgba(0, 0, 0, 0.15);
+  background: linear-gradient(135deg, #e67600 0%, #c56600 100%);
+}
+
+.card-button:hover::before {
+  left: 100%;
+}
+
+.card-button:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 12px rgba(183, 104, 36, 0.3), 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Tab indicator for active appearance */
+.dashboard-card::after {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 6px;
+  background: linear-gradient(90deg, #ff8c00, #ffa500, #ff8c00);
+  border-radius: 0 0 8px 8px;
+  opacity: 0;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(255, 140, 0, 0.4);
+}
+
+.dashboard-card:hover::after {
+  opacity: 1;
+  transform: translateX(-50%) translateY(2px);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .dashboard-header {
+    padding: 1rem;
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  .logo-header {
+    justify-content: center;
+  }
+
+  .dashboard-logo {
+    height: 35px;
+  }
+
+  .dashboard-content {
+    padding: 1rem;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .welcome-section h2 {
+    font-size: 1.6rem;
+  }
+
+  .dashboard-card {
+    min-height: 160px;
+  }
+
+  .card-header {
+    padding: 1.25rem 1rem 0.75rem;
+  }
+
+  .dashboard-card h3 {
+    font-size: 1.2rem;
+  }
+
+  .dashboard-card p {
+    font-size: 0.9rem;
+  }
+
+  .card-content {
+    padding: 0.75rem 1rem 1.25rem;
+  }
+
+  .card-button {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.9rem;
+  }
+}
