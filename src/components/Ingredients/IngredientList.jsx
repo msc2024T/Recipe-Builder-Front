@@ -22,10 +22,10 @@ import {
     Add,
     Kitchen,
     Edit,
-    Delete,
-    Category
+    Delete
 } from '@mui/icons-material';
 import http_service from '../../utils/http_service';
+import AddIngredient from './AddIngredient';
 
 // Styled components
 const IngredientContainer = styled(Box)(({ theme }) => ({
@@ -34,13 +34,15 @@ const IngredientContainer = styled(Box)(({ theme }) => ({
 }));
 
 const StyledCard = styled(Card)(({ theme }) => ({
-    height: '100%',
+    height: 260,
+    width: 220,
     display: 'flex',
     flexDirection: 'column',
     borderRadius: 16,
     boxShadow: '0 4px 16px rgba(183, 104, 36, 0.1)',
     border: '1px solid rgba(255, 140, 0, 0.1)',
     transition: 'all 0.3s ease',
+    overflow: 'hidden',
     '&:hover': {
         transform: 'translateY(-4px)',
         boxShadow: '0 8px 24px rgba(183, 104, 36, 0.2)',
@@ -64,38 +66,22 @@ const IngredientList = () => {
     const [ingredients, setIngredients] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
+    const [showAddModal, setShowAddModal] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
         fetchIngredients();
     }, []);
 
+    // Updated to use the correct API endpoint for ingredients
     const fetchIngredients = async () => {
         try {
             setLoading(true);
-            // Replace with your actual ingredients API endpoint
-            const response = await http_service.get('/ingredients/');
+            const response = await http_service.get('/recipes/ingredient/'); // Updated API endpoint
             setIngredients(response.data.data || []);
         } catch (err) {
             setError('Failed to fetch ingredients. Please try again.');
             console.error('Error fetching ingredients:', err);
-            // Mock data for now
-            setIngredients([
-                {
-                    id: 1,
-                    name: "Tomatoes",
-                    category: "Vegetables",
-                    unit: "pieces",
-                    created_at: new Date().toISOString()
-                },
-                {
-                    id: 2,
-                    name: "Olive Oil",
-                    category: "Oils",
-                    unit: "ml",
-                    created_at: new Date().toISOString()
-                }
-            ]);
         } finally {
             setLoading(false);
         }
@@ -118,7 +104,15 @@ const IngredientList = () => {
     };
 
     const handleAddNew = () => {
-        navigate('/ingredients/create');
+        setShowAddModal(true);
+    };
+
+    const handleCloseModal = () => {
+        setShowAddModal(false);
+    };
+
+    const handleIngredientAdded = (newIngredient) => {
+        setIngredients((prevIngredients) => [...prevIngredients, newIngredient]);
     };
 
     if (loading) {
@@ -136,37 +130,31 @@ const IngredientList = () => {
     return (
         <IngredientContainer>
             <Container maxWidth="lg">
-                <Paper
-                    elevation={0}
-                    sx={{
-                        textAlign: 'center',
-                        mb: 4,
-                        p: 3,
-                        background: 'rgba(255, 255, 255, 0.9)',
-                        borderRadius: 3,
-                    }}
-                >
+                <Box textAlign="center">
                     <Typography
-                        variant="h4"
+                        variant="h3"
                         component="h1"
                         sx={{
-                            color: '#ff8c00',
+                            color: '#8b4513',
                             fontWeight: 700,
                             mb: 1,
+                            textShadow: '2px 2px 4px rgba(139, 69, 19, 0.1)',
                         }}
                     >
-                        <Kitchen sx={{ mr: 2, fontSize: '2rem' }} />
-                        My Ingredients
+                        Ingredient Collection
                     </Typography>
                     <Typography
                         variant="h6"
                         sx={{
-                            color: '#666',
+                            color: '#a0522d',
+                            textShadow: '1px 1px 2px rgba(160, 82, 45, 0.1)',
+                            mb: 3,
                         }}
                     >
                         Manage your ingredient inventory
                     </Typography>
-                </Paper>
+                </Box>
+
 
                 {error && (
                     <Alert severity="error" sx={{ mb: 3, borderRadius: 2 }}>
@@ -180,6 +168,7 @@ const IngredientList = () => {
                         sx={{
                             textAlign: 'center',
                             p: 6,
+
                             background: 'rgba(255, 255, 255, 0.9)',
                             borderRadius: 3,
                         }}
@@ -209,12 +198,28 @@ const IngredientList = () => {
                         </Button>
                     </Paper>
                 ) : (
-                    <Grid container spacing={3}>
+                    <Grid container spacing={3} justifyContent="flex-start">
                         {ingredients.map((ingredient) => (
-                            <Grid item xs={12} sm={6} md={4} lg={3} key={ingredient.id}>
+                            <Grid item key={ingredient.id} sx={{ display: 'flex', justifyContent: 'center' }}>
                                 <StyledCard>
-                                    <CardContent sx={{ flexGrow: 1, p: 3 }}>
-                                        <Stack spacing={2}>
+                                    {ingredient.image_url && (
+                                        <Box
+                                            component="img"
+                                            src={ingredient.image_url}
+                                            alt={ingredient.name}
+                                            sx={{
+                                                width: '100%',
+                                                height: 150,
+                                                objectFit: 'cover',
+                                                borderRadius: '16px 16px 0 0',
+                                            }}
+                                            onError={(e) => {
+                                                e.target.style.display = 'none';
+                                            }}
+                                        />
+                                    )}
+                                    <CardContent sx={{ flexGrow: 1, p: 1.5, minHeight: 90 }}>
+                                        <Stack spacing={1.5}>
                                             <Box display="flex" alignItems="center" justifyContent="space-between">
                                                 <Typography
                                                     variant="h6"
@@ -223,6 +228,11 @@ const IngredientList = () => {
                                                         color: '#ff8c00',
                                                         fontWeight: 700,
                                                         fontSize: '1.1rem',
+                                                        lineHeight: 1.2,
+                                                        overflow: 'hidden',
+                                                        textOverflow: 'ellipsis',
+                                                        whiteSpace: 'nowrap',
+                                                        maxWidth: '70%',
                                                     }}
                                                 >
                                                     {ingredient.name}
@@ -232,7 +242,7 @@ const IngredientList = () => {
                                                         <IconButton
                                                             size="small"
                                                             onClick={() => handleEdit(ingredient.id)}
-                                                            sx={{ color: '#ff8c00' }}
+                                                            sx={{ color: '#ff8c00', p: 0.5 }}
                                                         >
                                                             <Edit fontSize="small" />
                                                         </IconButton>
@@ -241,26 +251,12 @@ const IngredientList = () => {
                                                         <IconButton
                                                             size="small"
                                                             onClick={() => handleDelete(ingredient.id)}
-                                                            sx={{ color: '#d32f2f' }}
+                                                            sx={{ color: '#d32f2f', p: 0.5 }}
                                                         >
                                                             <Delete fontSize="small" />
                                                         </IconButton>
                                                     </Tooltip>
                                                 </Box>
-                                            </Box>
-
-                                            <Box>
-                                                <Chip
-                                                    icon={<Category />}
-                                                    label={ingredient.category}
-                                                    variant="outlined"
-                                                    size="small"
-                                                    sx={{
-                                                        borderColor: '#ff8c00',
-                                                        color: '#ff8c00',
-                                                        fontWeight: 500,
-                                                    }}
-                                                />
                                             </Box>
 
                                             <Typography
@@ -296,6 +292,13 @@ const IngredientList = () => {
                 >
                     <Add />
                 </AddButton>
+
+                {/* Add Ingredient Modal */}
+                <AddIngredient
+                    open={showAddModal}
+                    onClose={handleCloseModal}
+                    onIngredientAdded={handleIngredientAdded}
+                />
             </Container>
         </IngredientContainer>
     );

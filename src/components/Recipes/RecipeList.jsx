@@ -38,7 +38,7 @@ const RecipeContainer = styled(Box)(({ theme }) => ({
 }));
 
 const StyledCard = styled(Card)(({ theme }) => ({
-    height: '100%',
+    height: '90%',
     display: 'flex',
     flexDirection: 'column',
     borderRadius: 20,
@@ -72,6 +72,7 @@ const StyledCardMedia = styled(CardMedia)(({ theme }) => ({
 
 const StyledCardContent = styled(CardContent)(({ theme }) => ({
     flexGrow: 1,
+
     padding: theme.spacing(2),
     '&:last-child': {
         paddingBottom: theme.spacing(2),
@@ -224,7 +225,7 @@ const RecipeList = () => {
         });
     };
 
-    const truncateInstructions = (instructions, maxLength = 100) => {
+    const truncateInstructions = (instructions, maxLength = 60) => {
         if (instructions.length <= maxLength) return instructions;
         return instructions.substring(0, maxLength) + '...';
     };
@@ -262,7 +263,7 @@ const RecipeList = () => {
                                 textShadow: '2px 2px 4px rgba(139, 69, 19, 0.1)',
                             }}
                         >
-                            My Recipe Collection
+                            Recipe Collection
                         </Typography>
                         <Typography
                             variant="h6"
