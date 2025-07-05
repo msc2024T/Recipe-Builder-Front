@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
 import theme from './theme/theme';
 import Login from './components/users/Login';
 import Signup from './components/users/Signup';
-import Dashboard from './components/Dashboard';
+import Dashboard from './components/Dashboard/Dashboard';
 
 // Protected Route component
 const ProtectedRoute = ({ children }) => {
@@ -20,6 +20,8 @@ const PublicRoute = ({ children }) => {
 };
 
 function App() {
+
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />

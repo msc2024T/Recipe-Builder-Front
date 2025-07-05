@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import axios from 'axios';
+import http_service from '../../utils/http_service';
 import {
     Box,
     Container,
@@ -117,16 +117,9 @@ const Signup = () => {
         setLoading(true);
         setError('');
         setMessage('');
-        const baseUrl = import.meta.env.VITE_API_BASE_URL;
-
-        if (!baseUrl) {
-            setError('API configuration error. Please contact support.');
-            setLoading(false);
-            return;
-        }
 
         try {
-            const response = await axios.post(`${baseUrl}/users/signup/`, {
+            const response = await http_service.post('/users/signup/', {
                 first_name: data.first_name,
                 last_name: data.last_name,
                 email: data.email,
