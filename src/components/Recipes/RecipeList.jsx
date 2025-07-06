@@ -339,7 +339,15 @@ const RecipeList = () => {
                                         },
                                     }}
                                 >
-                                    <StyledCard>
+                                    <StyledCard
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            e.stopPropagation();
+                                            console.log('Card clicked, navigating to recipe:', recipe.id);
+                                            navigate(`/recipes/${recipe.id}`);
+                                        }}
+                                        sx={{ cursor: 'pointer' }}
+                                    >
                                         <StyledCardMedia
                                             image={recipe.image_url || '/api/placeholder/300/200'}
                                             title={recipe.title}

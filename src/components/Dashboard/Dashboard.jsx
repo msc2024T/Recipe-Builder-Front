@@ -182,10 +182,10 @@ const Dashboard = () => {
             <StyledAppBar position="static">
                 <Toolbar>
                     <LogoContainer sx={{ flexGrow: 1 }}>
-                        <Avatar
+                        <img
                             src={logo}
                             alt="Recipe Builder"
-                            sx={{ width: 40, height: 40 }}
+                            style={{ width: '40px', height: '40px' }}
                         />
                         <Typography variant="h5" component="h1" sx={{ fontWeight: 700, color: '#ff8c00' }}>
                             Recipe Builder

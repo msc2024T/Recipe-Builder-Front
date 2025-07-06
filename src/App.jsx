@@ -6,6 +6,7 @@ import theme from './theme/theme';
 import Login from './components/users/Login';
 import Signup from './components/users/Signup';
 import Dashboard from './components/Dashboard/Dashboard';
+import RecipeDetail from './components/Recipes/RecipeDetail';
 
 // Protected Route component
 const ProtectedRoute = ({ children }) => {
@@ -55,6 +56,16 @@ function App() {
               element={
                 <ProtectedRoute>
                   <Dashboard />
+                </ProtectedRoute>
+              }
+            />
+
+            {/* Recipe detail route */}
+            <Route
+              path="/recipes/:id"
+              element={
+                <ProtectedRoute>
+                  <RecipeDetail />
                 </ProtectedRoute>
               }
             />
