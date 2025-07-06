@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import {
     Box,
     Container,
@@ -26,6 +25,7 @@ import {
 } from '@mui/icons-material';
 import http_service from '../../utils/http_service';
 import AddIngredient from './AddIngredient';
+import EditIngredient from './EditIngredient';
 
 // Styled components
 const IngredientContainer = styled(Box)(({ theme }) => ({
@@ -67,7 +67,8 @@ const IngredientList = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [showAddModal, setShowAddModal] = useState(false);
-    const navigate = useNavigate();
+    const [showEditModal, setShowEditModal] = useState(false);
+    const [selectedIngredient, setSelectedIngredient] = useState(null);
 
     useEffect(() => {
         fetchIngredients();
@@ -87,14 +88,26 @@ const IngredientList = () => {
         }
     };
 
-    const handleEdit = (ingredientId) => {
-        navigate(`/ingredients/edit/${ingredientId}`);
+    const handleEdit = (ingredient) => {
+        setSelectedIngredient(ingredient);
+        setShowEditModal(true);
+    };
+
+    const handleCloseEditModal = () => {
+        setShowEditModal(false);
+        setSelectedIngredient(null);
+    };
+
+    const handleIngredientUpdated = (updatedIngredient) => {
+        setIngredients(ingredients.map(ingredient =>
+            ingredient.id === updatedIngredient.id ? updatedIngredient : ingredient
+        ));
     };
 
     const handleDelete = async (ingredientId) => {
         if (window.confirm('Are you sure you want to delete this ingredient?')) {
             try {
-                await http_service.delete(`/ingredients/${ingredientId}/`);
+                await http_service.delete(`/recipes/ingredient/${ingredientId}/`);
                 setIngredients(ingredients.filter(ingredient => ingredient.id !== ingredientId));
             } catch (err) {
                 setError('Failed to delete ingredient. Please try again.');
@@ -241,7 +254,7 @@ const IngredientList = () => {
                                                     <Tooltip title="Edit">
                                                         <IconButton
                                                             size="small"
-                                                            onClick={() => handleEdit(ingredient.id)}
+                                                            onClick={() => handleEdit(ingredient)}
                                                             sx={{ color: '#ff8c00', p: 0.5 }}
                                                         >
                                                             <Edit fontSize="small" />
@@ -298,6 +311,14 @@ const IngredientList = () => {
                     open={showAddModal}
                     onClose={handleCloseModal}
                     onIngredientAdded={handleIngredientAdded}
+                />
+
+                {/* Edit Ingredient Modal */}
+                <EditIngredient
+                    open={showEditModal}
+                    onClose={handleCloseEditModal}
+                    ingredient={selectedIngredient}
+                    onIngredientUpdated={handleIngredientUpdated}
                 />
             </Container>
         </IngredientContainer>

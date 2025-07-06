@@ -38,6 +38,7 @@ import {
 } from '@mui/icons-material';
 import http_service from '../../utils/http_service';
 import AddRecipeIngredients from './AddRecipeIngredients';
+import EditRecipe from './EditRecipe';
 
 // Styled components
 const DetailContainer = styled(Box)(({ theme }) => ({
@@ -101,6 +102,7 @@ const RecipeDetail = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [showAddIngredientsModal, setShowAddIngredientsModal] = useState(false);
+    const [showEditRecipeModal, setShowEditRecipeModal] = useState(false);
     const [editingIngredient, setEditingIngredient] = useState(null);
     const [editQuantity, setEditQuantity] = useState('');
 
@@ -145,7 +147,7 @@ const RecipeDetail = () => {
 
 
     const handleEdit = () => {
-        navigate(`/recipes/edit/${id}`);
+        setShowEditRecipeModal(true);
     };
 
     const handleDelete = async () => {
@@ -200,6 +202,17 @@ const RecipeDetail = () => {
 
     const handleIngredientsAdded = () => {
         // Refresh the ingredients list (which will also update recipe if needed)
+        fetchRecipeIngredients();
+    };
+
+    const handleCloseEditRecipeModal = () => {
+        setShowEditRecipeModal(false);
+    };
+
+    const handleRecipeUpdated = (updatedRecipe) => {
+        // Update the local recipe state with the updated data
+        setRecipe(updatedRecipe);
+        // Optionally refresh ingredients to ensure consistency
         fetchRecipeIngredients();
     };
 
@@ -647,23 +660,7 @@ const RecipeDetail = () => {
                                     </ContentSection>
                                 )}
 
-                                {/* Action Buttons */}
-                                <Stack direction="row" spacing={2} sx={{ mt: 4 }}>
-                                    <ActionButton
-                                        className="primary"
-                                        startIcon={<Edit />}
-                                        onClick={handleEdit}
-                                    >
-                                        Edit Recipe
-                                    </ActionButton>
-                                    <ActionButton
-                                        className="secondary"
-                                        startIcon={<Share />}
-                                        onClick={handleShare}
-                                    >
-                                        Share Recipe
-                                    </ActionButton>
-                                </Stack>
+
                             </Stack>
                         </CardContent>
                     </RecipeCard>
@@ -796,6 +793,14 @@ const RecipeDetail = () => {
                     </Button>
                 </DialogActions>
             </Dialog>
+
+            {/* Edit Recipe Modal */}
+            <EditRecipe
+                open={showEditRecipeModal}
+                onClose={handleCloseEditRecipeModal}
+                recipe={recipe}
+                onRecipeUpdated={handleRecipeUpdated}
+            />
         </DetailContainer>
     );
 };
