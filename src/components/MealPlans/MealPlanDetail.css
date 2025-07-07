@@ -1,0 +1,248 @@
+/* MealPlanDetail.css */
+
+/* Custom animations for enhanced interactivity */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.meal-plan-detail-container {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.header-card {
+  animation: scaleIn 0.5s ease-out;
+}
+
+.recipe-card {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.recipe-card:nth-child(1) {
+  animation-delay: 0.1s;
+}
+.recipe-card:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.recipe-card:nth-child(3) {
+  animation-delay: 0.3s;
+}
+.recipe-card:nth-child(4) {
+  animation-delay: 0.4s;
+}
+.recipe-card:nth-child(5) {
+  animation-delay: 0.5s;
+}
+.recipe-card:nth-child(6) {
+  animation-delay: 0.6s;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .meal-plan-detail-container {
+    padding: 16px !important;
+  }
+
+  .header-card .MuiCardContent-root {
+    padding: 24px !important;
+  }
+
+  .stats-container {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 16px !important;
+  }
+
+  .action-buttons {
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 8px !important;
+  }
+
+  .action-buttons .MuiButton-root {
+    width: 100% !important;
+  }
+
+  /* Table responsive design */
+  .recipe-table {
+    min-width: 600px;
+  }
+
+  .recipe-table .MuiTableCell-root {
+    padding: 8px;
+  }
+
+  .recipe-table .recipe-image {
+    width: 40px !important;
+    height: 40px !important;
+  }
+
+  .recipe-table .recipe-title {
+    font-size: 0.9rem !important;
+  }
+
+  .recipe-table .MuiChip-root {
+    font-size: 0.7rem;
+    height: 24px;
+  }
+}
+
+/* Custom scrollbar for better aesthetics */
+.meal-plan-detail-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.meal-plan-detail-container::-webkit-scrollbar-track {
+  background: rgba(255, 140, 0, 0.1);
+  border-radius: 3px;
+}
+
+.meal-plan-detail-container::-webkit-scrollbar-thumb {
+  background: rgba(255, 140, 0, 0.3);
+  border-radius: 3px;
+}
+
+.meal-plan-detail-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 140, 0, 0.5);
+}
+
+/* Enhanced focus states for accessibility */
+.MuiButton-root:focus-visible {
+  outline: 2px solid #ff8c00;
+  outline-offset: 2px;
+}
+
+.MuiIconButton-root:focus-visible {
+  outline: 2px solid #ff8c00;
+  outline-offset: 2px;
+}
+
+/* Loading state improvements */
+.loading-container {
+  animation: fadeInUp 0.3s ease-out;
+}
+
+/* Print styles */
+@media print {
+  .meal-plan-detail-container {
+    background: white !important;
+    padding: 0 !important;
+  }
+
+  .header-card,
+  .recipe-card {
+    box-shadow: none !important;
+    border: 1px solid #ddd !important;
+    break-inside: avoid;
+  }
+
+  .action-buttons,
+  .MuiFab-root {
+    display: none !important;
+  }
+}
+
+/* Enhanced transitions for smooth interactions */
+.recipe-card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.recipe-card:hover {
+  transform: translateY(-4px) scale(1.02);
+}
+
+/* Better spacing for content readability */
+.recipe-description {
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.date-section {
+  padding: 16px 0;
+}
+
+/* Enhanced chip styling */
+.stats-chip {
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+/* Improved dialog styling */
+.delete-dialog {
+  backdrop-filter: blur(4px);
+}
+
+.delete-dialog .MuiDialog-paper {
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.2);
+}
+
+/* Better visual hierarchy */
+.section-title {
+  position: relative;
+  padding-bottom: 8px;
+}
+
+.section-title::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(135deg, #ff8c00 0%, #d67200 100%);
+  border-radius: 2px;
+}
+
+/* Enhanced empty state */
+.empty-state {
+  animation: fadeInUp 0.5s ease-out;
+}
+
+.empty-state-icon {
+  animation: scaleIn 0.6s ease-out 0.2s both;
+}
+
+/* Improved accessibility contrast */
+.high-contrast .MuiTypography-root {
+  color: #000 !important;
+}
+
+.high-contrast .MuiChip-root {
+  border-width: 2px !important;
+}
+
+/* Enhanced mobile responsiveness */
+@media (max-width: 480px) {
+  .header-title {
+    font-size: 1.75rem !important;
+  }
+
+  .section-title {
+    font-size: 1.5rem !important;
+  }
+
+  .recipe-grid {
+    gap: 16px !important;
+  }
+
+  .recipe-card .MuiCardContent-root {
+    padding: 16px !important;
+  }
+}

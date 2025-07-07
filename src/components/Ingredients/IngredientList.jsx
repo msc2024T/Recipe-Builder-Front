@@ -282,15 +282,7 @@ const IngredientList = () => {
                                                 Unit: {ingredient.unit}
                                             </Typography>
 
-                                            <Typography
-                                                variant="caption"
-                                                sx={{
-                                                    color: '#999',
-                                                    fontSize: '0.75rem',
-                                                }}
-                                            >
-                                                Added: {new Date(ingredient.created_at).toLocaleDateString()}
-                                            </Typography>
+
                                         </Stack>
                                     </CardContent>
                                 </StyledCard>

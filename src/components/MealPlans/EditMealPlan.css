@@ -1,0 +1,97 @@
+/* EditMealPlan.css */
+
+/* Enhanced modal animations */
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.edit-meal-plan-modal {
+  animation: slideInUp 0.3s ease-out;
+}
+
+.edit-meal-plan-content {
+  animation: fadeIn 0.4s ease-out;
+}
+
+.step-circle {
+  transition: all 0.3s ease;
+}
+
+.step-circle.active {
+  transform: scale(1.1);
+}
+
+.step-circle.completed {
+  animation: pulse 0.5s ease-out;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+/* Form field enhancements */
+.form-field {
+  transition: all 0.3s ease;
+}
+
+.form-field:focus-within {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 140, 0, 0.15);
+}
+
+/* Loading states */
+.loading-spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Success state animations */
+.success-icon {
+  animation: scaleIn 0.5s ease-out;
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .edit-meal-plan-modal .MuiDialog-paper {
+    margin: 8px;
+    width: calc(100% - 16px);
+    max-height: calc(100vh - 64px);
+  }
+}

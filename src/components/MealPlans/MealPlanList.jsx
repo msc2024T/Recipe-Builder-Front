@@ -13,21 +13,26 @@ import {
     CircularProgress,
     Stack,
     Chip,
-    IconButton,
-    Tooltip,
     Paper,
-    Divider
+    Divider,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    IconButton
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import {
     Add,
     CalendarMonth,
-    Edit,
-    Delete,
     Restaurant,
-    Schedule
+    Schedule,
+    Visibility
 } from '@mui/icons-material';
 import http_service from '../../utils/http_service';
+import AddMealPlan from './AddMealPlan';
 
 // Styled components
 const MealPlanContainer = styled(Box)(({ theme }) => ({
@@ -35,17 +40,38 @@ const MealPlanContainer = styled(Box)(({ theme }) => ({
     padding: theme.spacing(3),
 }));
 
-const StyledCard = styled(Card)(({ theme }) => ({
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
+const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
     borderRadius: 16,
-    boxShadow: '0 4px 16px rgba(183, 104, 36, 0.1)',
+    boxShadow: '0 8px 24px rgba(183, 104, 36, 0.15)',
     border: '1px solid rgba(255, 140, 0, 0.1)',
-    transition: 'all 0.3s ease',
+    background: 'white',
+    overflow: 'hidden',
+}));
+
+const StyledTableHead = styled(TableHead)(({ theme }) => ({
+    background: 'linear-gradient(135deg, rgba(255, 140, 0, 0.1) 0%, rgba(255, 140, 0, 0.05) 100%)',
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
     '&:hover': {
-        transform: 'translateY(-4px)',
-        boxShadow: '0 8px 24px rgba(183, 104, 36, 0.2)',
+        backgroundColor: 'rgba(255, 140, 0, 0.03)',
+    },
+    '&:last-child td, &:last-child th': {
+        border: 0,
+    },
+}));
+
+const ActionButton = styled(Button)(({ theme }) => ({
+    borderRadius: 8,
+    textTransform: 'none',
+    fontWeight: 600,
+    padding: '6px 16px',
+    background: 'linear-gradient(135deg, #ff8c00 0%, #d67200 100%)',
+    color: 'white',
+    '&:hover': {
+        background: 'linear-gradient(135deg, #d67200 0%, #b76824 100%)',
+        transform: 'translateY(-1px)',
+        boxShadow: '0 4px 12px rgba(183, 104, 36, 0.3)',
     },
 }));
 
@@ -66,6 +92,7 @@ const MealPlanList = () => {
     const [mealPlans, setMealPlans] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
+    const [showAddModal, setShowAddModal] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -75,54 +102,28 @@ const MealPlanList = () => {
     const fetchMealPlans = async () => {
         try {
             setLoading(true);
-            // Replace with your actual meal plans API endpoint
-            const response = await http_service.get('/meal-plans/');
-            setMealPlans(response.data.data || []);
+            setError('');
+            const response = await http_service.get('/mealplans/meal-plans/');
+            setMealPlans(response.data || []);
         } catch (err) {
-            setError('Failed to fetch meal plans. Please try again.');
+            // setError('Failed to fetch meal plans. Please try again.');
             console.error('Error fetching meal plans:', err);
-            // Mock data for now
-            setMealPlans([
-                {
-                    id: 1,
-                    name: "Weekly Family Meal Plan",
-                    start_date: "2025-07-07",
-                    end_date: "2025-07-13",
-                    meals_count: 21,
-                    created_at: new Date().toISOString()
-                },
-                {
-                    id: 2,
-                    name: "Healthy Diet Plan",
-                    start_date: "2025-07-14",
-                    end_date: "2025-07-20",
-                    meals_count: 15,
-                    created_at: new Date().toISOString()
-                }
-            ]);
         } finally {
             setLoading(false);
         }
     };
 
-    const handleEdit = (mealPlanId) => {
-        navigate(`/meal-plans/edit/${mealPlanId}`);
-    };
-
-    const handleDelete = async (mealPlanId) => {
-        if (window.confirm('Are you sure you want to delete this meal plan?')) {
-            try {
-                await http_service.delete(`/meal-plans/${mealPlanId}/`);
-                setMealPlans(mealPlans.filter(plan => plan.id !== mealPlanId));
-            } catch (err) {
-                setError('Failed to delete meal plan. Please try again.');
-                console.error('Error deleting meal plan:', err);
-            }
-        }
-    };
-
     const handleAddNew = () => {
-        navigate('/meal-plans/create');
+        setShowAddModal(true);
+    };
+
+    const handleCloseModal = () => {
+        setShowAddModal(false);
+    };
+
+    const handleMealPlanAdded = (newMealPlan) => {
+        // Add the new meal plan to the list
+        setMealPlans(prevPlans => [...prevPlans, newMealPlan]);
     };
 
     const handleView = (mealPlanId) => {
@@ -144,37 +145,30 @@ const MealPlanList = () => {
     return (
         <MealPlanContainer>
             <Container maxWidth="lg">
-                <Paper
-                    elevation={0}
-                    sx={{
-                        textAlign: 'center',
-                        mb: 4,
-                        p: 3,
-                        background: 'rgba(255, 255, 255, 0.9)',
-                        borderRadius: 3,
-                    }}
-                >
+                <Box textAlign="center" sx={{ mb: 4 }}>
                     <Typography
-                        variant="h4"
+                        variant="h3"
                         component="h1"
                         sx={{
-                            color: '#ff8c00',
+                            color: '#8b4513',
                             fontWeight: 700,
                             mb: 1,
+                            textShadow: '2px 2px 4px rgba(139, 69, 19, 0.1)',
                         }}
                     >
-                        <CalendarMonth sx={{ mr: 2, fontSize: '2rem' }} />
                         My Meal Plans
                     </Typography>
                     <Typography
                         variant="h6"
                         sx={{
-                            color: '#666',
+                            color: '#a0522d',
+                            textShadow: '1px 1px 2px rgba(160, 82, 45, 0.1)',
                         }}
                     >
-                        Plan your meals for the week
+                        Plan your meals effortlessly and stay organized
                     </Typography>
-                </Paper>
+                </Box>
+
 
                 {error && (
                     <Alert severity="error" sx={{ mb: 3, borderRadius: 2 }}>
@@ -217,113 +211,112 @@ const MealPlanList = () => {
                         </Button>
                     </Paper>
                 ) : (
-                    <Grid container spacing={3}>
-                        {mealPlans.map((mealPlan) => (
-                            <Grid item xs={12} sm={6} md={4} key={mealPlan.id}>
-                                <StyledCard>
-                                    <CardContent sx={{ flexGrow: 1, p: 3 }}>
-                                        <Stack spacing={2}>
-                                            <Box display="flex" alignItems="center" justifyContent="space-between">
+                    <StyledTableContainer component={Paper}>
+                        <Table>
+                            <StyledTableHead>
+                                <TableRow>
+                                    <TableCell>
+                                        <Box display="flex" alignItems="center" gap={1}>
+                                            <CalendarMonth sx={{ color: '#ff8c00', fontSize: '1.2rem' }} />
+                                            <Typography variant="h6" sx={{ color: '#ff8c00', fontWeight: 600 }}>
+                                                Meal Plan
+                                            </Typography>
+                                        </Box>
+                                    </TableCell>
+                                    <TableCell>
+                                        <Box display="flex" alignItems="center" gap={1}>
+                                            <Schedule sx={{ color: '#ff8c00', fontSize: '1.2rem' }} />
+                                            <Typography variant="h6" sx={{ color: '#ff8c00', fontWeight: 600 }}>
+                                                Start Date
+                                            </Typography>
+                                        </Box>
+                                    </TableCell>
+                                    <TableCell>
+                                        <Box display="flex" alignItems="center" gap={1}>
+                                            <Schedule sx={{ color: '#ff8c00', fontSize: '1.2rem' }} />
+                                            <Typography variant="h6" sx={{ color: '#ff8c00', fontWeight: 600 }}>
+                                                End Date
+                                            </Typography>
+                                        </Box>
+                                    </TableCell>
+                                    <TableCell>
+                                        <Typography variant="h6" sx={{ color: '#ff8c00', fontWeight: 600 }}>
+                                            Duration
+                                        </Typography>
+                                    </TableCell>
+                                    <TableCell align="center">
+                                        <Typography variant="h6" sx={{ color: '#ff8c00', fontWeight: 600 }}>
+                                            Actions
+                                        </Typography>
+                                    </TableCell>
+                                </TableRow>
+                            </StyledTableHead>
+                            <TableBody>
+                                {mealPlans.map((mealPlan) => {
+                                    const startDate = new Date(mealPlan.start_date);
+                                    const endDate = new Date(mealPlan.end_date);
+                                    const diffTime = Math.abs(endDate - startDate);
+                                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+
+                                    return (
+                                        <StyledTableRow key={mealPlan.id}>
+                                            <TableCell>
                                                 <Typography
-                                                    variant="h6"
-                                                    component="h3"
+                                                    variant="body1"
                                                     sx={{
-                                                        color: '#ff8c00',
-                                                        fontWeight: 700,
-                                                        fontSize: '1.1rem',
-                                                        flex: 1,
-                                                        mr: 1,
+                                                        fontWeight: 600,
+                                                        color: '#333',
+                                                        fontSize: '1rem',
                                                     }}
                                                 >
-                                                    {mealPlan.name}
+                                                    {mealPlan.title}
                                                 </Typography>
-                                                <Box>
-                                                    <Tooltip title="Edit">
-                                                        <IconButton
-                                                            size="small"
-                                                            onClick={() => handleEdit(mealPlan.id)}
-                                                            sx={{ color: '#ff8c00' }}
-                                                        >
-                                                            <Edit fontSize="small" />
-                                                        </IconButton>
-                                                    </Tooltip>
-                                                    <Tooltip title="Delete">
-                                                        <IconButton
-                                                            size="small"
-                                                            onClick={() => handleDelete(mealPlan.id)}
-                                                            sx={{ color: '#d32f2f' }}
-                                                        >
-                                                            <Delete fontSize="small" />
-                                                        </IconButton>
-                                                    </Tooltip>
-                                                </Box>
-                                            </Box>
-
-                                            <Divider sx={{ borderColor: 'rgba(255, 140, 0, 0.2)' }} />
-
-                                            <Box>
-                                                <Stack direction="row" spacing={1} alignItems="center" mb={1}>
-                                                    <Schedule sx={{ fontSize: '1rem', color: '#666' }} />
-                                                    <Typography
-                                                        variant="body2"
-                                                        sx={{ color: '#666', fontWeight: 500 }}
-                                                    >
-                                                        Duration
-                                                    </Typography>
-                                                </Stack>
-                                                <Typography
-                                                    variant="body2"
-                                                    sx={{ color: '#333', ml: 3 }}
-                                                >
-                                                    {new Date(mealPlan.start_date).toLocaleDateString()} - {new Date(mealPlan.end_date).toLocaleDateString()}
+                                            </TableCell>
+                                            <TableCell>
+                                                <Typography variant="body2" sx={{ color: '#666' }}>
+                                                    {startDate.toLocaleDateString('en-US', {
+                                                        month: 'short',
+                                                        day: 'numeric',
+                                                        year: 'numeric'
+                                                    })}
                                                 </Typography>
-                                            </Box>
-
-                                            <Box>
+                                            </TableCell>
+                                            <TableCell>
+                                                <Typography variant="body2" sx={{ color: '#666' }}>
+                                                    {endDate.toLocaleDateString('en-US', {
+                                                        month: 'short',
+                                                        day: 'numeric',
+                                                        year: 'numeric'
+                                                    })}
+                                                </Typography>
+                                            </TableCell>
+                                            <TableCell>
                                                 <Chip
-                                                    icon={<Restaurant />}
-                                                    label={`${mealPlan.meals_count} meals`}
-                                                    variant="outlined"
+                                                    label={`${diffDays} day${diffDays === 1 ? '' : 's'}`}
                                                     size="small"
                                                     sx={{
-                                                        borderColor: '#ff8c00',
+                                                        backgroundColor: 'rgba(255, 140, 0, 0.1)',
                                                         color: '#ff8c00',
-                                                        fontWeight: 500,
+                                                        fontWeight: 600,
+                                                        border: '1px solid rgba(255, 140, 0, 0.3)',
                                                     }}
                                                 />
-                                            </Box>
-
-                                            <Typography
-                                                variant="caption"
-                                                sx={{
-                                                    color: '#999',
-                                                    fontSize: '0.75rem',
-                                                }}
-                                            >
-                                                Created: {new Date(mealPlan.created_at).toLocaleDateString()}
-                                            </Typography>
-
-                                            <Button
-                                                variant="outlined"
-                                                size="small"
-                                                onClick={() => handleView(mealPlan.id)}
-                                                sx={{
-                                                    borderColor: '#ff8c00',
-                                                    color: '#ff8c00',
-                                                    '&:hover': {
-                                                        backgroundColor: 'rgba(255, 140, 0, 0.1)',
-                                                        borderColor: '#d67200',
-                                                    },
-                                                }}
-                                            >
-                                                View Plan
-                                            </Button>
-                                        </Stack>
-                                    </CardContent>
-                                </StyledCard>
-                            </Grid>
-                        ))}
-                    </Grid>
+                                            </TableCell>
+                                            <TableCell align="center">
+                                                <ActionButton
+                                                    startIcon={<Visibility />}
+                                                    onClick={() => handleView(mealPlan.id)}
+                                                    size="small"
+                                                >
+                                                    View
+                                                </ActionButton>
+                                            </TableCell>
+                                        </StyledTableRow>
+                                    );
+                                })}
+                            </TableBody>
+                        </Table>
+                    </StyledTableContainer>
                 )}
 
                 <AddButton
@@ -332,6 +325,13 @@ const MealPlanList = () => {
                 >
                     <Add />
                 </AddButton>
+
+                {/* Add Meal Plan Modal */}
+                <AddMealPlan
+                    open={showAddModal}
+                    onClose={handleCloseModal}
+                    onMealPlanAdded={handleMealPlanAdded}
+                />
             </Container>
         </MealPlanContainer>
     );
